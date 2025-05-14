@@ -10,7 +10,7 @@ install_latest() {
     asdf set --home "$runtime" "$LATEST_VERSION"
 }
 
-runtimes=("go" "nodejs" "python" "rust")
+runtimes=("golang" "nodejs" "python" "rust")
 for runtime in "${runtimes[@]}"; do 
     install_latest "$runtime"
 done
