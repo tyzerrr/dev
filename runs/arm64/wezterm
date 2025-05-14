@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+HOMEBREW_ASSUME_YES=1 brew install --cask tmux
