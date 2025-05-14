@@ -45,12 +45,13 @@ log() {
     fi
 }
 
-log "RUN: env: $env -- grep: $grep"
-
 runs_dir=`find $script_dir/runs/$architecture -mindepth 1 -maxdepth 1 -executable`
+if [[ $? -gt 0 ]]; then
+    runs_dir=`gfind $script_dir/runs/$architecture -mindepth 1 -maxdepth 1 -executable`
+fi
 
 # First of all install utils libraries
-"./$script_dir/runs/$architecture/libs"
+"$script_dir/runs/$architecture/libs"
 
 for s in $runs_dir; do
     if basename $s | grep -vq "$grep"; then
