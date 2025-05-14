@@ -1,11 +1,11 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # NOTE: Basically, install both latest version only.
 install_latest() {
     runtime="$1"
     echo "Installing ${runtime}..."
     asdf plugin add ${runtime}
-    LATEST_VERSION=$(asdf latest "$runtime"})
+    LATEST_VERSION=$(asdf latest "$runtime")
     asdf install "$runtime" "$LATEST_VERSION"
     asdf set --home "$runtime" "$LATEST_VERSION"
 }
