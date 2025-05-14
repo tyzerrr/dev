@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+sudo pacman -S --noconfirm docker
+
+# launch docker daemon
+sudo systemctl enable --now docker.service
+sudo systemctl enable --now containerd.service

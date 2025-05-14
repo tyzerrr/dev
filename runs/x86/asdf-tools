@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/usr/bin/env bash
 
 # NOTE: Basically, install both latest version only.
 install_latest() {
