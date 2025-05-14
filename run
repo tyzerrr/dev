@@ -1,0 +1,63 @@
+#!/usr/bin/env bash
+
+#NOTE: I don't care about windows, because... it's not system, sorry Bill.
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+architecture=$(uname -m)
+
+if [ -z "$architecture" ]; then
+    echo "architecture var needs to be present"
+    echo "YOU SHOULD INSTALL uname."
+    exit 1
+fi
+
+if [[ "$architecture" == "aarch64" ]]; then
+    architecture="arm64"
+fi
+
+if [ -z "$DEV_ENV" ]; then
+    echo "env var DEV_ENV needs to be present"
+    exit 1
+fi
+
+# if i just did DEV_ENV=$(pwd) ./run then this is needed for the rest of the
+# scripts
+export DEV_ENV="$DEV_ENV"
+
+grep=""
+dry_run="0"
+
+while [[ $# -gt 0 ]]; do
+    echo "ARG: \"$1\""
+    if [[ "$1" == "--dry" ]]; then
+        dry_run="1"
+    else
+        grep="$1"
+    fi
+    shift
+done
+
+log() {
+    if [[ $dry_run == "1" ]]; then
+        echo "[DRY_RUN]: $1"
+    else
+        echo "$1"
+    fi
+}
+
+log "RUN: env: $env -- grep: $grep"
+
+runs_dir=`find $script_dir/runs/$architecture -mindepth 1 -maxdepth 1 -executable`
+
+for s in $runs_dir; do
+    if basename $s | grep -vq "$grep"; then
+        log "grep \"$grep\" filtered out $s"
+        continue
+    fi
+
+    log "running script: $s"
+
+    if [[ $dry_run == "0" ]]; then
+        $s
+    fi
+done

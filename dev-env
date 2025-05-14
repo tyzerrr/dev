@@ -1,0 +1,68 @@
+#!/usr/bin/env bash
+
+# NOTE:
+# dev-env is used for migrating all scripts and configurations to proper place that follows my dotfiles.
+
+dry_run="0"
+
+if [ -z "$XDG_CONFIG_HOME" ]; then
+    echo "Failed to find \$XDG_CONFIG_HOME env variable."
+    echo "So use $HOME/.config/"
+    $XDG_CONFIG_HOME="$HOME/.config"
+fi
+
+# NOTE: ${DEV_ENV} is an unified environment variable to use entire scripts including this. 
+#       ${DEV_ENV} is normally $HOME, but if you wanna change root directory to clone this repo, change ${DEV_ENV}.
+
+if [ -z "$DEV_ENV" ]; then
+    echo "\$DEV_ENV needs to be present."
+    exit 1
+fi
+
+if [[ "$1" == "--dry" ]]; then
+    dry_run="1"
+fi
+
+log() {
+    if [[ "$dry_run" == "1" ]]; then
+        echo "[DRY_RUN] $1"
+    else
+        echo "$1"
+    fi
+}
+
+update() {
+    pushd $1 &> /dev/null
+    configs=$(find . -mindepth 1 -maxdepth 1 -type d)
+    for c in $configs; do
+        directory=${2%/}/${c#./}
+	log "$directory"
+        log "removing: rm -rf ${directory}"
+        
+        if [[ "$dry_run" == "0" ]]; then
+            rm -rf $directory
+        fi
+        log "copying: cp -r $c $2"
+        if [[ "$dry_run" == "0" ]]; then
+            mkdir -p $2
+            cp -r ./$c $directory
+        fi
+    done
+    popd &> /dev/null
+}
+
+
+copy() {
+    log "removing: $2"
+    if [[ $dry_run == "0" ]]; then
+        rm $2
+    fi
+    log "copying: $1 to $2"
+    if [[ $dry_run == "0" ]]; then
+        cp $1 $2
+    fi
+}
+
+
+update "$DEV_ENV/env/.config" "$HOME/.config"
+# move "$DEV_ENV/env/.local" "$XDG_HOME/.local" # TODO: after migrating whole bunch of my configs, need to write some useful scripts stored on .local/scripts/
