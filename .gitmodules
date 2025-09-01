@@ -1,6 +1,7 @@
 [submodule "env/.config"]
 	path = env/.config
-	url = https://github.com/TlexCypher/dotfiles
+	url = https://github.com/tyzerrr/dotfiles
+    branch = feat/non-stow
 [submodule "tmux-sessionizer"]
 	path = tmux-sessionizer
-	url = https://github.com/TlexCypher/tmux-sessionizer.git
+	url = https://github.com/tyzerrr/tmux-sessionizer.git
