@@ -45,7 +45,7 @@ log() {
     fi
 }
 
-runs_dir=`find $script_dir/runs/$architecture -mindepth 1 -maxdepth 1 -executable`
+runs_dir=`find $script_dir/runs/$architecture -mindepth 1 -maxdepth 1`
 if [[ $? -gt 0 ]]; then
     runs_dir=`gfind $script_dir/runs/$architecture -mindepth 1 -maxdepth 1 -executable`
 fi
